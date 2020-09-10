@@ -1,0 +1,3 @@
+Command for remotely copying files from/to sassauna server:
+scp -r msc20f10@sassauna3.ee.ethz.ch:/scratch1/msc20f10/stag/training_checkpoints/train_for_real /home/fabian/Documents/Master_thesis/Python_Code/models/
+scp -r /home/fabian/Documents/Master_thesis/Data_Collection/3kOhm_FB/Recording_session_00/data_MT_FabianGeiger.mat msc20f10@sassauna1.ee.ethz.ch:/scratch1/msc20f10/data/3kOhm_FB/Recording_session_00/

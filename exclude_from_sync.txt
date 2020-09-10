@@ -1,0 +1,11 @@
+.*
+*.png
+tmp*
+__pycache__
+testing_scripts
+utils
+results
+models
+Jupyter_Notebooks
+xCubeAI_test
+Things_to_try.txt
