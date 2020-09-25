@@ -172,7 +172,7 @@ if False:
     #ax.set_xticklabels(labels)
     ax.grid()
     ax.legend()
-    plt.show()
+    plt.savefig('7foldCV_realData.png')
     
     
 if False:
@@ -259,7 +259,7 @@ if False:
     save_path = data_folder / 'tactile_threshold'
     np.savetxt(save_path, tactile_threshold, fmt='%u', delimiter=', ')
     
-if False:
+if True:
     import matplotlib.pyplot as plt
     import numpy as np
     ## Plot inter-session variability
@@ -280,7 +280,7 @@ if False:
     x = np.arange(len(labels))  # the label locations
     width = 0.35  # the width of the bars
     
-    fig, ax = plt.subplots(figsize=(16,9))
+    fig, ax = plt.subplots(figsize=(8,4.5))
     rects1 = ax.bar(x - width/2, np.mean(top1, axis=1), width=width, yerr=np.std(top1, axis=1),
                     color=(211/255,94/255,96/255), capsize=8, label='Top 1')
     rects2 = ax.bar(x + width/2, np.mean(top3, axis=1), width=width, yerr=np.std(top3, axis=1),
@@ -294,7 +294,7 @@ if False:
     ax.set_xticklabels(labels)
     ax.legend()
     ax.grid()
-    plt.show()
+    plt.savefig('intersession_realData.png')
     
     
 if False:

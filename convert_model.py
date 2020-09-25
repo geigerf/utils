@@ -12,10 +12,9 @@ import numpy as np
 import time
 import torch
 import sys
-#code_dir = '/home/fabian/Documents/Master_thesis/Python_Code/pytorch_stag/STAG_slim'
-#code_dir = '../pytorch_stag/STAG_slim_minimal'
-code_dir = '../pytorch_stag/STAG_slim_minimal_realData'
-sys.path.insert(0, code_dir) # needed to make classes and functions available
+code_dir = '../pytorch_stag/STAG_slim_minimal'
+#code_dir = '../pytorch_stag/STAG_slim_minimal_realData'
+sys.path.insert(0, code_dir) # needed to make classes and functions available, maybe an absolute path needs to be provided
 #from torchsummary import summary
 from classification.CustomDataLoader import CustomDataLoader
 from classification.ClassificationModel import ClassificationModel
@@ -31,7 +30,7 @@ parser.add_argument('--test', type=bool, nargs='?', const=True, default=False,
 args = parser.parse_args()
 
 nframes = args.nframes
-nclasses = 17
+nclasses = 17 # Careful about this!
 batch_size = 32
 if 'orig' in args.experiment:
     nfilters = 64

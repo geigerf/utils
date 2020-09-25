@@ -36,13 +36,13 @@ def plot_cm(session):
     #sn.set(font_scale=1.1) # for label size
     
     plt.figure(figsize=(9,9))
-    plt.title('Session ' + str(session))
+    plt.title('Session ' + str(session+1))
     hm = sn.heatmap(df_cm, annot=True, annot_kws={"size": 8},
                cbar=False, cmap=plt.get_cmap('Greens'), fmt='d', square=True)
     hm.set_xticklabels(hm.get_xticklabels(), rotation=45,
                        horizontalalignment='right')
-    plt.show()
-    #plt.savefig('sess' + str(session) + '_cm')
+    #plt.show()
+    plt.savefig('sess' + str(session+1) + '_cm')
     
 
 def plot_cm_cv():
@@ -75,7 +75,7 @@ def plot_cm_cv():
     
     
 if __name__ == "__main__":
-    #sessions = [0, 1, 2, 3, 4]
-    #for sess in sessions:
-    #    plot_cm(sess)
-    plot_cm_cv()
+    sessions = [0, 1, 2, 3, 4]
+    for sess in sessions:
+        plot_cm(sess)
+    #plot_cm_cv()

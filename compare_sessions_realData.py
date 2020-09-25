@@ -50,9 +50,8 @@ def normalize_per_pixel(pressure):
 seed = 333
 n_classes = 17
 split = 'session'
-plot = False
+plot = True
 
-#filename = '/home/fabian/Documents/Master_thesis/Data_Collection/3kOhm_FB/data_MT_FabianGeiger_4sess.mat'
 filename = '../../Data_Collection/3kOhm_FB/data_MT_FabianGeiger_5sess.mat'
 
 split = 'session'
@@ -154,45 +153,41 @@ elif split == 'session':
             mean_5.append(np.mean(samples, axis=0).reshape((32,32)))
         else:
             mean_5.append(np.zeros((32,32)))
-    
-    
-    response = [np.mean(mean_1), np.mean(mean_2), np.mean(mean_3), np.mean(mean_4), np.mean(mean_5)]
-    response = response/max(response)
-    sessions = np.arange(1, 6)
-    
-    plt.rcParams.update({'font.size': 14})
-    plt.figure(figsize=(8, 4.5))
-    plt.title('Sensor Degradation')
-    plt.plot(sessions, response, marker='o', color=(204/255, 37/255, 41/255))
-    plt.xlabel('Session')
-    plt.xlim(0, 6)
-    plt.xticks(np.arange(7))
-    plt.ylim(0, 1.1)
-    #plt.yticks([0, 25, 50, 75, 100])
-    plt.ylabel('Relative mean response')
-    plt.grid(True)
-    plt.show()
+
     
     if plot:
         # Plot the mean pressure frames for each recording session
-        #fname = '/home/fabian/Documents/Master_thesis/Python_Code/results/stag/compare_sessions_realData/session_'
         fname = '../results/stag/compare_sessions_realData/session_'
-        fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(24, 6), sharey=True)
-        cbar_ax = fig.add_axes([.91, .15, .03, .7])
+        fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(1, 5, figsize=(15, 3))#, sharey=True)
+        plt.subplots_adjust(left=0.1, right=0.9)
+        #cbar_ax = fig.add_axes([.91, .15, .03, .7])
         for j in range(n_classes):
-            vmax = np.max([mean_1[j], mean_2[j], mean_3[j]])
-            vmin = np.min([mean_1[j], mean_2[j], mean_3[j]])
-            sns.heatmap(mean_1[j], vmax=vmax, vmin=vmin,
-                        square=True, ax=ax1, cbar=False)
-            ax1.title.set_text('Session 1')
-            sns.heatmap(mean_2[j], vmax=vmax, vmin=vmin,
-                        square=True, ax=ax2, cbar=False)
-            ax2.title.set_text('Session 2')
-            sns.heatmap(mean_3[j], vmax=vmax, vmin=vmin,
-                        square=True, ax=ax3, cbar=False)
-            ax3.title.set_text('Session 3')
-            sns.heatmap(mean_4[j], vmax=vmax, vmin=vmin,
-                        square=True, ax=ax4, cbar_ax=cbar_ax)
-            ax4.title.set_text('Session 4')
-            fig.suptitle('Class {:d}'.format(j), fontsize=16)
+            vmax = np.max([mean_1[j], mean_2[j], mean_3[j], mean_4[j], mean_5[j]])
+            vmin = np.min([mean_1[j], mean_2[j], mean_3[j], mean_4[j], mean_5[j]])
+            sns.heatmap(np.transpose(mean_1[j]), vmax=vmax, vmin=vmin,
+                        square=True, ax=ax1, cbar=False, cmap='gray')
+            ax1.axes.xaxis.set_label_text('Session 1')
+            ax1.axes.xaxis.set_ticks([])
+            ax1.axes.yaxis.set_ticks([])
+            sns.heatmap(np.transpose(mean_2[j]), vmax=vmax, vmin=vmin,
+                        square=True, ax=ax2, cbar=False, cmap='gray')
+            ax2.axes.xaxis.set_label_text('Session 2')
+            ax2.axes.xaxis.set_ticks([])
+            ax2.axes.yaxis.set_ticks([])
+            sns.heatmap(np.transpose(mean_3[j]), vmax=vmax, vmin=vmin,
+                        square=True, ax=ax3, cbar=False, cmap='gray')
+            ax3.axes.xaxis.set_label_text('Session 3')
+            ax3.axes.xaxis.set_ticks([])
+            ax3.axes.yaxis.set_ticks([])
+            sns.heatmap(np.transpose(mean_4[j]), vmax=vmax, vmin=vmin,
+                        square=True, ax=ax4, cbar=False, cmap='gray')
+            ax4.axes.xaxis.set_label_text('Session 4')
+            ax4.axes.xaxis.set_ticks([])
+            ax4.axes.yaxis.set_ticks([])
+            sns.heatmap(np.transpose(mean_5[j]), vmax=vmax, vmin=vmin,
+                        square=True, ax=ax5, cmap='gray', cbar=False)#cbar_ax=cbar_ax)
+            ax5.axes.xaxis.set_label_text('Session 5')
+            ax5.axes.xaxis.set_ticks([])
+            ax5.axes.yaxis.set_ticks([])
+            fig.suptitle('Class {:d}'.format(j))#, fontsize=16)
             plt.savefig(fname=(fname + 'class' + str(j)))

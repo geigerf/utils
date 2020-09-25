@@ -184,7 +184,7 @@ def plot_summary():
     plt.legend(loc='lower right')
     plt.grid(True)
     
-    plt.show()
+    plt.savefig('compare_acc.png')
     return
 
 
@@ -293,7 +293,7 @@ def plot_random_CV():
     top3_mean = np.array([94.7, 99.0, 99.7, 99.8, 99.9, 99.8, 99.8, 99.9])
     top3_std = np.array([0.398, 0.245, 0.101, 0.098, 0.083, 0.203, 0.136, 0.098])
     
-    plt.rcParams.update({'font.size': 18})
+    plt.rcParams.update({'font.size': 14})
     plt.figure(figsize=(7, 6))
     plt.title('Random split 6 fold cross validation')
     plt.errorbar(frames, top1_mean, yerr=top1_std, capsize=3,
