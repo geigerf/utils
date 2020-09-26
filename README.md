@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This repo contains useful functions for visualizing, manipulating, analyzing, ... tactile or IMU data.
+This repo contains useful functions for visualizing, manipulating, analyzing, ... tactile or IMU data,
+or for syncing local directories with Sassauna directories.
 
 
 ## System requirements
