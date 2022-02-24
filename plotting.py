@@ -12,6 +12,15 @@ import seaborn as sn
 import pandas as pd
 import numpy as np
 import argparse
+import os
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 parser = argparse.ArgumentParser(description='Plot Results.')
 parser.add_argument('--experiment', type=str, default='stag',
@@ -20,12 +29,15 @@ parser.add_argument('--plot', type=str,
                     help="Name of the plot.")
 parser.add_argument('--network', type=str, default='stag',
                     help="Name of the current network.")
+parser.add_argument('--savecsv', type=str2bool, nargs='?', const=False, default=False,
+                    help="save the curves in csv.")
 args = parser.parse_args()
 
-results = '/home/fabian/Documents/results/' + args.network + '/'
+results = '../results/' + args.network + '/'
+output_dir = './output/'
+nfolds = 4
 
-
-def plot_results(experiment):
+def plot_results(experiment, save_csv):
     """
     Utility function to plot evolution of training/test loss and precision
     """
@@ -65,8 +77,52 @@ def plot_results(experiment):
     plt.grid(True)
     plt.suptitle('Results of experiment '+experiment)
     plt.show()
+
+    if save_csv:
+        print(save_csv)
+        filename = output_dir+experiment + '.csv'
+        header = "epochs,trainloss,trainprec,testloss,testprec"
+        a = np.asarray([epochs,trainloss,trainprec,testloss,testprec])
+        with open(filename, 'w') as f:
+            f.write(header + "\n")
+            np.savetxt(f, a.T, delimiter=",")
+
     return
-    
+
+def plot_avg_std_results(experiment, save_csv):
+    histories = []
+    for file in os.listdir(results):
+        if file.startswith(experiment):
+            histories.append(file)
+    print(histories)
+    for i in range(nfolds):#len(histories)):
+        plot_results(experiment+'_'+str(i), save_csv)
+
+    if save_csv:
+        dfs = []
+        for i in range(nfolds):#len(histories)):
+            csvfile=output_dir + experiment + '_' + str(i) + '.csv'
+            df = pd.read_csv(csvfile)
+            dfs.append(df)
+        nepochs=len(dfs[0]['epochs'])
+        #nfolds=len(dfs)
+        trainloss=np.zeros((nfolds,nepochs))
+        trainprec=np.zeros((nfolds,nepochs))
+        testloss=np.zeros((nfolds,nepochs))
+        testprec=np.zeros((nfolds,nepochs))
+        for i in range(nfolds):#len(histories)):
+            trainloss[i,:]=dfs[i]['trainloss'].values
+            trainprec[i]=dfs[i]['trainprec'].values
+            testloss[i]=dfs[i]['testloss'].values
+            testprec[i]=dfs[i]['testprec'].values
+
+        print(save_csv)
+        filename = output_dir+experiment + '_avg_std.csv'
+        header = "epochs,trainloss_avg,trainprec_avg,testloss_avg,testprec_avg,trainloss_std,trainprec_std,testloss_std,testprec_std"
+        a = np.asarray([dfs[i]['epochs'].values, np.mean(trainloss, axis=0),np.mean(trainprec, axis=0),np.mean(testloss, axis=0),np.mean(testprec, axis=0), np.std(trainloss, axis=0),np.std(trainprec, axis=0),np.std(testloss, axis=0),np.std(testprec, axis=0)])
+        with open(filename, 'w') as f:
+            f.write(header + "\n")
+            np.savetxt(f, a.T, delimiter=",")
 
 def plot_summary():
     """
@@ -324,5 +380,7 @@ if __name__ == "__main__":
         plot_cm(args.experiment)
     elif args.plot == 'random_split_CV':
         plot_random_CV()
+    elif args.plot == 'journal':
+        plot_avg_std_results(args.experiment, args.savecsv)
     else:
-        plot_results(args.experiment)
+        plot_results(args.experiment, args.savecsv)
